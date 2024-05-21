@@ -1,0 +1,35 @@
+﻿@page "/products/{code}.html"
+@model ShopEcommerce.Public.Web.Pages.Products.CategoryModel
+<div class="section-box">
+    <div class="breadcrumbs-div">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a class="font-xs color-gray-1000" href="/">Home</a></li>
+                <li><a class="font-xs color-gray-500">@Model.Category.Name</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="section-box shop-template mt-30">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 order-first order-lg-last">
+                
+                
+                <div class="row mt-20">
+                   
+                        @foreach (var item in Model.ProductData.Results)
+                        {
+                            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <partial name="_ProductItem1" model="item" />
+                            </div>
+                        }
+                    
+                </div>
+               <partial name="_Paginator" model="Model.ProductData" />
+            </div>
+           
+        </div>
+    </div>
+</div>
+

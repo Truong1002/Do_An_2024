@@ -1,0 +1,11 @@
+<p-panel class="panel" header="Biểu đồ doanh thu theo tháng">
+    <div class="formgroup-inline">
+      <div class="field">
+        <label for="year-select">Chọn năm:</label>
+        <select id="year-select" [(ngModel)]="selectedYear" (change)="onYearChange($event)">
+          <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+        </select>
+      </div>
+    </div>
+    <p-chart type="bar" [data]="chartData" [options]="chartOptions"></p-chart>
+  </p-panel>

@@ -1,0 +1,223 @@
+﻿@page "/checkout.html"
+@model ShopEcommerce.Public.Web.Pages.Cart.CheckoutModel
+@using ShopEcommerce.Public.Products;
+@inject IProductsAppService _productsAppService;
+@{
+}
+
+<div class="section-box">
+    <div class="breadcrumbs-div">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a class="font-xs color-gray-1000" href="index.html">Home</a></li>
+                <li><a class="font-xs color-gray-500" href="shop-grid.html">Shop</a></li>
+                <li><a class="font-xs color-gray-500" href="shop-cart.html">Checkout</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<section class="section-box shop-template">
+    <div class="container">
+        @if (Model.CreateStatus != null)
+        {
+            <div class="row">
+                @if (Model.CreateStatus == true)
+                {
+                    <div class="alert alert-success" role="alert">
+                        Create order successful.
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert">
+                        Create order failed, please try again!
+                    </div>
+                }
+            </div>
+        }
+        @if (Model.CreateStatus == null)
+        {
+            <div class="row">
+                <div class="col-lg-6">
+
+                   @*  <form method="post">
+                        <div class="box-border">
+                             
+                            <div class="border-bottom-4 text-center mb-20">
+                                <div class="text-or font-md color-gray-500">Or</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-6 mb-20">
+                                    <h5 class="font-md-bold color-brand-3 text-sm-start text-center">Contact information</h5>
+                                </div>
+                                <div class="col-lg-6 col-sm-6 mb-20 text-sm-end text-center"><span class="font-sm color-brand-3">Already have an account?</span><a class="font-sm color-brand-1" href="/login.html"> Login</a></div>
+
+                                
+                                <div class="col-lg-12">
+                                    <h5 class="font-md-bold color-brand-3 mt-15 mb-20">Shipping address</h5>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <input class="form-control font-sm" type="text" asp-for="Order.CustomerName" placeholder="Name*">                                     
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <input class="form-control font-sm" type="text" asp-for="Order.CustomerAddress" placeholder="Address 1*">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <input class="form-control font-sm" type="text" asp-for="Order.CustomerPhoneNumber" placeholder="Phone*">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row mt-20">
+                            <div class="col-lg-6 col-5 mb-20"><a class="btn font-sm-bold color-brand-1 arrow-back-1" href="/shop-cart.html">Return to Cart</a></div>
+                            <div class="col-lg-6 col-7 mb-20 text-end"><button class="btn btn-buy w-auto arrow-next" type="submit">Place an Order</button></div>
+                        </div>
+                    </form> *@
+                    <form method="post" asp-page-handler="PlaceOrder">
+                        <div class="box-border">
+                            <div class="border-bottom-4 text-center mb-20">
+                                <div class="text-or font-md color-gray-500">Hoặc</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-6 mb-20">
+                                    <h5 class="font-md-bold color-brand-3 text-sm-start text-center">Thông tin liên hệ</h5>
+                                </div>
+                                <div class="col-lg-6 col-sm-6 mb-20 text-sm-end text-center">
+                                    <span class="font-sm color-brand-3">Bạn đã có tài khoản?</span>
+                                    <a class="font-sm color-brand-1" href="/login.html"> Đăng nhập</a>
+                                </div>
+                                <div class="col-lg-12">
+                                    <h5 class="font-md-bold color-brand-3 mt-15 mb-20">Địa chỉ giao hàng</h5>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <input class="form-control font-sm" type="text" asp-for="Order.CustomerName" placeholder="Name*">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <input class="form-control font-sm" type="text" asp-for="Order.CustomerAddress" placeholder="Address 1*">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <input class="form-control font-sm" type="text" asp-for="Order.CustomerPhoneNumber" placeholder="Phone*">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-20">
+                            <div class="col-lg-6 col-5 mb-20">
+                                <a class="btn font-sm-bold color-brand-1 arrow-back-1" href="/shop-cart.html">Trở về giỏ hàng</a>
+                            </div>
+                            <div class="col-lg-6 col-7 mb-20 text-end">
+                                <!-- Thêm asp-page-handler để chỉ định handler cho nút này -->
+                                <button class="btn btn-buy w-auto arrow-next" type="submit" asp-page-handler="PlaceOrder">Đặt hàng</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-6">
+                    <div class="box-border">
+                        <h5 class="font-md-bold mb-20">Đơn hàng của bạn</h5>
+                        <div class="listCheckout">
+                            @foreach (var item in Model.CartItems)
+                            {
+                                var url = $"/products/{item.Product.CategorySlug}/{item.Product.Slug}.html";
+                                var fileContent = await _productsAppService.GetThumbnailImageAsync(item.Product.ThumbnailPicture);
+                                var base64Image = ShopEcommerce.Helpers.ImageHelper.ShowBase64(item.Product.ThumbnailPicture, fileContent);
+                                <div class="item-wishlist">
+                                    <div class="wishlist-product">
+                                        <div class="product-wishlist">
+                                            <div class="product-image">
+                                                <a href="@url">
+                                                    <img src="@base64Image" alt="@item.Product.Name">
+                                                </a>
+                                            </div>
+                                            <div class="product-info">
+                                                <a href="@url">
+                                                    <h6 class="color-brand-3">@item.Product.Name</h6>
+                                                </a>
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="wishlist-status">
+                                        <h5 class="color-gray-500">@item.Quantity</h5>
+                                    </div>
+                                    <div class="wishlist-price">
+                                        <h4 class="color-brand-3 font-lg-bold">@((item.Product.SellPrice * item.Quantity).ToString("N0"))</h4>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                        <form method="post">
+                            <div class="form-group d-flex mt-15">
+                                <input class="form-control mr-15" asp-for="CouponCode" placeholder="Nhập mã giảm giá" />
+                                <button class="btn btn-buy w-auto" formaction="/checkout.html?handler=ApplyCoupon" type="submit">Apply</button>
+                            </div>
+                        </form>
+                        @if (TempData["CouponApplied"] != null)
+                        {
+                            <div class="alert alert-success">@TempData["CouponApplied"]</div>
+                        }
+                        @if (TempData["CouponError"] != null)
+                        {
+                            <div class="alert alert-danger">@TempData["CouponError"]</div>
+                        }
+                        <div class="form-group mb-0">
+                            @if (ViewData["DiscountAmount"] != null)
+                            {
+                                <div class="row mb-10">
+                                    <div class="col-lg-6 col-6"><span class="font-md-bold color-brand-3">Tổng tiền</span></div>
+                                    <div class="col-lg-6 col-6 text-end"><span class="font-lg-bold color-brand-3">@ViewData["Subtotal"]</span></div>
+                                </div>
+                                <div class="border-bottom mb-10 pb-5">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-6"><span class="font-md-bold color-brand-3">Giảm giá</span></div>
+                                        <div class="col-lg-6 col-6 text-end"><span class="font-lg-bold color-brand-3">-@ViewData["DiscountAmount"]</span></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-6"><span class="font-md-bold color-brand-3">Tổng cộng</span></div>
+                                    <div class="col-lg-6 col-6 text-end"><span class="font-lg-bold color-brand-3">@ViewData["TotalAfterDiscount"]</span></div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    
+                                    <div class="col-lg-6 col-6"><span class="font-md-bold color-brand-3">Tổng cộng</span></div>
+                                    <div class="col-lg-6 col-6 text-end"><span class="font-lg-bold color-brand-3">@Model.CartItems.Sum(x => x.Product.SellPrice * x.Quantity).ToString("N0")</span></div>
+                                </div>
+                            }
+                        </div>
+                        @* <div class="form-group mb-0">
+                            <div class="row mb-10">
+                                <div class="col-lg-6 col-6"><span class="font-md-bold color-brand-3">Subtotal</span></div>
+                                <div class="col-lg-6 col-6 text-end"><span class="font-lg-bold color-brand-3">@(Model.CartItems.Sum(x=>x.Product.SellPrice * x.Quantity))</span></div>
+                            </div>
+                            <div class="border-bottom mb-10 pb-5">
+                                <div class="row">
+                                    <div class="col-lg-6 col-6"><span class="font-md-bold color-brand-3">Shipping</span></div>
+                                    <div class="col-lg-6 col-6 text-end"><span class="font-lg-bold color-brand-3">0</span></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-6"><span class="font-md-bold color-brand-3">Total</span></div>
+                                <div class="col-lg-6 col-6 text-end"><span class="font-lg-bold color-brand-3">@(Model.CartItems.Sum(x=>x.Product.SellPrice * x.Quantity))</span></div>
+                            </div>
+                        </div> *@
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

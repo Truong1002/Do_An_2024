@@ -1,0 +1,182 @@
+﻿@page "/my-order.html"
+@using ShopEcommerce.Orders
+@model ShopEcommerce.Public.Web.Pages.Cart.MyorderModel
+@{
+    ViewData["Title"] = "My Orders";
+}
+<section class="section-box shop-template mt-30">
+    <div class="container box-account-template">
+        <h3>Đơn hàng của bạn</h3>
+        <div class="box-tabs mb-100">
+            <ul class="nav nav-tabs nav-tabs-account" role="tablist">
+                <li><a class="active" href="#tab-orders" data-bs-toggle="tab" role="tab" aria-controls="tab-orders" aria-selected="true">Orders</a></li>
+            </ul>
+            <div class="border-bottom mt-20 mb-40"></div>
+            <div class="tab-content mt-30">
+                <div class="tab-pane fade active show" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders">
+                    @foreach (var order in Model.Orders)
+                    {
+                        var statusClass = order.Status switch
+                        {
+                            OrderStatus.New => "status-new",
+                            OrderStatus.Confirmed => "status-confirmed",
+                            OrderStatus.Canceled => "status-canceled",
+                            _ => "status-unknown"
+                        };
+
+                        <div class="box-orders">
+                            <div class="head-orders">
+                                <div class="head-left">
+                                    <h5 class="mr-20">Order ID: @order.Code</h5>
+                                    <span class="font-md color-brand-3 mr-20">
+                                        Date: @order.OrderDate.ToString("dd/MM/yyyy HH:mm")
+                                    </span>
+                                    
+                                    <span class="@statusClass">@GetOrderStatusText(order.Status)</span>
+                                </div>
+                                <div class="head-right">
+                                    @if (order.Status == OrderStatus.New)
+                                    {
+                                        <form method="post" asp-page-handler="CancelOrder">
+                                            <input type="hidden" name="OrderId" value="@order.Id" />
+                                            <button type="submit" class="btn btn-danger btn-sm">Hủy đơn hàng</button>
+                                        </form>
+                                    }
+                                </div>
+                            </div>
+                            <div class="body-orders">
+                                <div class="list-orders">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Hình ảnh</th>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Số lượng</th>
+                                                <th>Đơn giá</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.OrderItems[order.Id])
+                                            {
+                                                <tr>
+                                                    <td class="image-orders">
+                                                        <img src="@item.ProductImageUrlBase64" alt="Ecom" style="width: 100px;">
+                                                    </td>
+                                                    <td class="info-orders">
+                                                        <h5>@item.ProductName</h5>
+                                                    </td>
+                                                    <td class="quantity-orders">
+                                                        <h5>@item.Quantity</h5>
+                                                    </td>
+                                                    <td class="price-orders">
+                                                        <h5>@item.Price.ToString("N0")</h5>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="footer-orders">
+                                <span>Giảm giá: @order.Discount</span>
+                                <span>Tổng tiền: @order.Total</span>
+                                <span>Tiền phải trả: @order.GrandTotal</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@functions {
+    private string GetOrderStatusText(OrderStatus status)
+    {
+        switch (status)
+        {
+            case OrderStatus.New:
+                return "Chờ xác nhận";
+            case OrderStatus.Confirmed:
+                return "Đã xác nhận. Đang vận chuyển.";
+            case OrderStatus.Canceled:
+                return "Đã hủy";
+            default:
+                return status.ToString();
+        }
+    }
+}
+<style>
+    .status-new {
+        color: orange;
+    }
+
+    .status-confirmed {
+        color: green;
+    }
+
+    .status-canceled {
+        color: red;
+    }
+
+    .status-unknown {
+        color: gray;
+    }
+
+    .box-orders {
+        border: 1px solid #ddd;
+        padding: 20px;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .head-orders {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .body-orders {
+        margin-bottom: 20px;
+    }
+
+    .item-orders {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .image-orders img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .footer-orders {
+        display: flex;
+        justify-content: flex-end;
+        gap: 20px;
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+    }
+
+        .footer-orders span {
+            font-weight: bold;
+        }
+
+    .list-orders table {
+        width: 100%;
+        border-collapse: separate; /* Cho phép thêm khoảng cách giữa các ô */
+        border-spacing: 10px 5px; /* Khoảng cách ngang 10px, dọc 5px */
+    }
+
+    .list-orders td {
+        padding: 8px; /* Padding trong mỗi ô */
+        vertical-align: top; /* Căn lề trên cho nội dung trong ô */
+    }
+
+    .list-orders img {
+        width: 100px; /* Đặt lại chiều rộng của hình ảnh */
+        height: auto; /* Chiều cao tự động */
+    }
+</style>

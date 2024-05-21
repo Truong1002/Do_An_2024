@@ -1,0 +1,57 @@
+<form [formGroup]="form" (ngSubmit)="saveChange()">
+    <p-panel #pnl header="Chi tiết mã giảm giá">
+      <!--form grid-->
+      <div class="formgrid grid">
+        <div class="field col-12">
+          <label for="name" class="block">Tên <span class="required">*</span></label>
+          <input id="name" pInputText type="text" class="w-full" formControlName="name" />
+          <app-validation-message
+            [entityForm]="form"
+            fieldName="name"
+            [validationMessages]="validationMessages.name"
+          ></app-validation-message>
+        </div>
+        <div class="field col-12">
+          <label for="couponCode" class="block">Coupon Code <span class="required">*</span></label>
+          <input id="couponCode" pInputText type="text" formControlName="couponCode" />
+          <app-validation-message
+            [entityForm]="form"
+            fieldName="couponCode"
+            [validationMessages]="validationMessages.couponCode"
+          ></app-validation-message>
+        </div>
+        <div class="field col-12">
+          <label for="validDate" class="block">Ngày bắt đầu <span class="required">*</span></label>
+          <input id="validDate" pInputText type="date" formControlName="validDate" />
+        </div>
+        <div class="field col-12">
+          <label for="expiredDate" class="block">Ngày kết thúc</label>
+          <input id="expiredDate" pInputText type="date" formControlName="expiredDate" />
+        </div>
+        <div class="field col-12">
+            <label for="discountAmount" class="block">Mức giảm giá <span class="required">*</span></label>
+            <input id="discountAmount" type="number" step="0.01" min="0" formControlName="discountAmount" class="w-full" />
+          </div>
+        <div class="field-checkbox col-12 md:col-3">
+          <p-checkbox formControlName="isActive" binary="true" id="isActive"></p-checkbox>
+          <label for="isActive">Kích hoạt</label>
+        </div>
+        
+      </div>
+      <ng-template pTemplate="footer">
+        <button
+          type="submit"
+          [disabled]="!form.valid || btnDisabled"
+          pButton
+          icon="pi pi-save"
+          iconPos="left"
+          label="Lưu lại"
+        ></button>
+      </ng-template>
+      <!--Block UI-->
+      <p-blockUI [blocked]="blockedPanel" >
+        <p-progressSpinner></p-progressSpinner>
+      </p-blockUI>
+    </p-panel>
+  </form>
+  

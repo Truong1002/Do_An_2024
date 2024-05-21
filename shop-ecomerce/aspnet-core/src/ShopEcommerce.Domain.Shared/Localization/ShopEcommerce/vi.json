@@ -1,0 +1,27 @@
+{
+  "culture": "vi",
+  "texts": {
+    "Permission:Catalog": "Danh Mục",
+    "Permission:Catalog.Product": "Sản phẩm",
+    "Permission:Catalog.Product.Create": "Tạo mới sản phẩm",
+    "Permission:Catalog.Product.Update": "Cập nhật sản phẩm",
+    "Permission:Catalog.Product.Delete": "Xóa sản phẩm",
+    "Permission:Catalog.Product.AttributeManage": "Quản lý thuộc tính",
+    "Permission:Catalog.Attribute": "Thuộc tính",
+    "Permission:Catalog.Attribute.Create": "Tạo mới thuộc tính",
+    "Permission:Catalog.Attribute.Update": "Cập nhật thuộc tính",
+    "Permission:Catalog.Attribute.Delete": "Xóa thuộc tính",
+    "Permission:Catalog.Category": "Loại sản phẩm",
+    "Permission:Catalog.Category.Create": "Tạo mới loại sản phẩm",
+    "Permission:Catalog.Category.Update": "Cập nhật loại sản phẩm",
+    "Permission:Catalog.Category.Delete": "Xóa loại sản phẩm",
+    "Permission:Catalog.Manufacturer": "Nhà sản xuất",
+    "Permission:Catalog.Manufacturer.Create": "Tạo mới nhà sản xuất",
+    "Permission:Catalog.Manufacturer.Update": "Cập nhật nhà sản xuất",
+    "Permission:Catalog.Manufacturer.Delete": "Xóa nhà sản xuất",
+    "Permission:Order": "Đơn hàng",
+    "Permission:Order.Create": "Tạo đơn hàng",
+    "Permission:Order.Update": "Cập nhật đơn hàng",
+    "Permission:Order.Delete": "Xóa đơn hàng"
+  }
+}

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>ShopEcommerce.Admin</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ShopEcommerce.Admin.Application\ShopEcommerce.Admin.Application.csproj" />
+    <ProjectReference Include="..\ShopEcommerce.Domain.Tests\ShopEcommerce.Domain.Tests.csproj" />
+    <ProjectReference Include="..\ShopEcommerce.TestBase\ShopEcommerce.TestBase.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+  </ItemGroup>
+
+</Project>

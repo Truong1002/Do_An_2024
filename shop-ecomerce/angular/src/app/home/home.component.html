@@ -1,0 +1,93 @@
+<p-panel header="Danh sách thống kê">
+  <!--Filter (search panel)-->
+  <div class="grid">
+    <div class="col-4">
+      <div class="formgroup-inline">
+        <div class="field">
+          <label for="start-date" class="p-sr-only">Ngày bắt đầu</label>
+          <input [(ngModel)]="startDate" id="start-date" pInputText type="date" placeholder="Chọn ngày bắt đầu" />
+        </div>
+        
+        <div class="field">
+          <label for="end-date" class="p-sr-only">Ngày kết thúc</label>
+          <input  [(ngModel)]="endDate" id="end-date" pInputText type="date" placeholder="Chọn ngày kết thúc" />
+        </div>
+      </div>
+    </div>
+    <div class="col-8">
+      <div class="formgroup-inline">
+        <div class="field">
+          <label for="txt-keyword" class="p-sr-only">Từ khóa</label>
+          <input (keyup.enter)="loadData()"  [(ngModel)]="keyword" id="txt-keyword" pInputText type="text" placeholder="Gõ từ khóa" />
+        </div>
+        <button
+          type="button"
+          pButton
+          (click)="loadData()"
+          icon="fa fa-search"
+          iconPos="left"
+          label="Tìm"
+        ></button>
+       
+      </div>
+    </div>
+  </div>
+  <button type="button" pButton (click)="openDetailChart()" label="Hiển thị biểu đồ doanh thu theo năm"></button>
+    <p-chart type="bar" [data]="chartData" [options]="chartOptions"></p-chart>
+  <!--Table-->
+  <p-table #pnl [value]="items" selectionMode="multiple">
+    
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 10px">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th>Tên sản phẩm</th>
+        <th>Tên nhà sản xuất</th>
+        <th>Hình Ảnh</th>
+        <th>Số lượng bán</th>
+        <th>Số tiền Discount</th>
+        <th>Tổng tiền chưa giảm</th>
+        <th>Tổng tiền</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr [pSelectableRow]="row">
+        <td style="width: 10px">
+          <span class="ui-column-title"></span>
+          <p-tableCheckbox [value]="row"></p-tableCheckbox>
+        </td>
+        <td>{{ row.productName }}</td>
+        <td>{{ row.manufacturerName }}</td>
+        <td>
+          <p-image [src]="row.safeThumbnailUrl" [alt]="row.thumbnailPicture" width="100"></p-image>
+        </td>
+        
+        <td>{{ row.quantitySold }}</td>
+        <td>{{row.discount| number: '1.0-0'}}</td>
+        <td>{{ row.total| number: '1.0-0' }}</td>
+        <td>{{ row.totalRevenue | number: '1.0-0' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div style="text-align: left">Tổng số bản ghi: {{ totalCount | number }}</div>
+      <div  style="text-align: left"><b>Tổng số lượng đã được đặt: {{ totalQuantitySold | number }}</b></div>
+      <div style="text-align: right; margin-right: 32px;">
+        <b>Tổng tiền thu được: {{ totalRevenue | number: '1.0-0' }}</b>
+      </div>
+      <button type="button" pButton (click)="exportToExcel()" label="Xuất Excel"></button>
+    </ng-template>
+
+  </p-table>
+  <!--Paginator-->
+  <p-paginator
+    [rows]="maxResultCount"
+    [totalRecords]="totalCount"
+    (onPageChange)="pageChanged($event)"
+    [rowsPerPageOptions]="[10, 20, 30, 50, 100]"
+  ></p-paginator>
+  <!--Block UI-->
+  <p-blockUI [blocked]="blockedPanel">
+    <p-progressSpinner></p-progressSpinner>
+  </p-blockUI>
+</p-panel>

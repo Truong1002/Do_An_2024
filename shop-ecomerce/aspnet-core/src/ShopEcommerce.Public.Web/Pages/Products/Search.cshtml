@@ -1,0 +1,35 @@
+﻿@page
+@model ShopEcommerce.Public.Web.Pages.Products.SearchModel
+
+<div class="section-box">
+    <div class="breadcrumbs-div">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a class="font-xs color-gray-1000" href="/">Home</a></li>
+                <li><a class="font-xs color-gray-500">Sản phẩm tìm kiếm</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="section-box shop-template mt-30">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 order-first order-lg-last">
+                
+                <div class="row mt-20">
+
+                    @foreach (var product in Model.Products.Results)
+                    {
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12">
+                            <partial name="_ProductItem1" model="product" />
+                        </div>
+                    }
+
+                </div>
+                <partial name="_Paginator" model="Model.Products" />
+
+
+            </div>
+        </div>
+    </div>
+</div>
